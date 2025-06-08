@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cow Records - Farm Milk Tracker</title>
+  <style>
+    /* Google Fonts: Poppins */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+    :root {
+      --color-bg: #ffffff;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-accent: #2563eb;
+      --color-accent-hover: #1d4ed8;
+      --color-card-bg: #f9fafb;
+      --color-card-shadow: rgba(99, 102, 241, 0.15);
+      --radius: 0.75rem;
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-md: rgba(0,0,0,0.1);
+      --font-headline: 'Poppins', sans-serif;
+      --font-body: 'Poppins', sans-serif;
+      --transition-default: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --max-container-width: 1200px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 60%, #ffffff 100%);
+      color: var(--color-text-secondary);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 72px; /* to offset sticky header */
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Decorative background shapes */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: 0;
+      pointer-events: none;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.2;
+      transform: translateZ(0);
+    }
+    body::before {
+      width: 320px;
+      height: 320px;
+      top: -80px;
+      left: -120px;
+      background: #3b82f6;
+      background: linear-gradient(45deg, #3b82f6 0%, #60a5fa 100%);
+    }
+    body::after {
+      width: 480px;
+      height: 480px;
+      bottom: -160px;
+      right: -140px;
+      background: #a5b4fc;
+      background: linear-gradient(45deg, #a5b4fc 0%, #818cf8 100%);
+    }
+
+    /* Sticky top nav */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 72px;
+      background: var(--color-bg);
+      border-bottom: 1px solid #e5e7eb;
+      box-shadow: 0 2px 8px var(--shadow-light);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 100;
+      font-family: var(--font-headline);
+      user-select: none;
+    }
+
+    header .logo {
+      font-weight: 800;
+      font-size: 1.75rem;
+      color: var(--color-accent);
+      letter-spacing: 0.1em;
+      cursor: default;
+      text-transform: uppercase;
+      font-feature-settings: "pnum";
+      line-height: 1;
+      user-select: text;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      font-weight: 600;
+      font-size: 1rem;
+      align-items: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      position: relative;
+      padding: 0.25rem 0;
+      transition: color var(--transition-default);
+      font-variant-numeric: tabular-nums;
+    }
+    nav a:hover,
+    nav a:focus {
+      color: var(--color-accent);
+      outline-offset: 3px;
+      outline-color: var(--color-accent);
+      outline-style: solid;
+      outline-width: 2px;
+      outline-radius: var(--radius);
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--color-accent);
+      border-radius: 1px;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    }
+    nav a:hover::after,
+    nav a:focus::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    main {
+      max-width: var(--max-container-width);
+      width: 100%;
+      padding: 4rem 3rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+      position: relative;
+      z-index: 10;
+      user-select: none;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      padding-bottom: 3rem;
+      user-select: text;
+    }
+    .hero h1 {
+      font-family: var(--font-headline);
+      font-weight: 800;
+      font-size: 4.25rem;
+      line-height: 1.05;
+      color: var(--color-text-primary);
+      margin: 0 0 0.6rem;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero p {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      margin: 0 auto;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .hero .cta-button {
+      margin-top: 36px;
+      background-color: var(--color-accent);
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      padding: 1rem 3rem;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.35);
+      letter-spacing: 0.05em;
+      transition: background-color var(--transition-default), transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
+      user-select: none;
+      font-feature-settings: "pnum";
+      text-transform: uppercase;
+      display: inline-block;
+    }
+    .hero .cta-button:hover,
+    .hero .cta-button:focus {
+      background-color: var(--color-accent-hover);
+      box-shadow: 0 15px 30px rgba(37, 99, 235, 0.55);
+      transform: scale(1.12);
+      outline: none;
+    }
+
+    /* Form styles */
+    form {
+      background: var(--color-card-bg);
+      padding: 3rem 3.5rem;
+      border-radius: var(--radius);
+      box-shadow:
+        0 8px 24px rgba(37, 99, 235, 0.15);
+      display: grid;
+      gap: 2.5rem;
+      max-width: 850px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 1.25rem;
+      position: relative;
+      z-index: 15;
+      user-select: text;
+    }
+
+    form label {
+      font-weight: 700;
+      color: var(--color-text-primary);
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 1.15rem;
+      letter-spacing: 0.03em;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="date"] {
+      width: 100%;
+      padding: 0.85rem 1.25rem;
+      border: 1.8px solid #cbd5e1;
+      border-radius: var(--radius);
+      font-size: 1.125rem;
+      font-family: var(--font-body);
+      transition:
+        border-color var(--transition-default),
+        box-shadow var(--transition-default),
+        background-color var(--transition-default);
+      color: var(--color-text-primary);
+      background-color: white;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.07);
+      font-variant-numeric: tabular-nums;
+      user-select: text;
+    }
+    form input[type="text"]:focus,
+    form input[type="number"]:focus,
+    form input[type="date"]:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.35);
+      background-color: #f8fbff;
+    }
+
+    form button {
+      background-color: var(--color-accent);
+      color: white;
+      font-weight: 700;
+      font-size: 1.35rem;
+      padding: 1.15rem 3rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition:
+        background-color var(--transition-default),
+        box-shadow var(--transition-default),
+        transform 0.32s cubic-bezier(0.4,0,0.2,1);
+      justify-self: start;
+      box-shadow: 0 16px 32px rgba(37, 99, 235, 0.35);
+      user-select: none;
+      font-feature-settings: "pnum";
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    form button:hover,
+    form button:focus {
+      background-color: var(--color-accent-hover);
+      box-shadow: 0 24px 48px rgba(37, 99, 235, 0.55);
+      transform: scale(1.08);
+      outline: none;
+    }
+
+    /* Cow cards container */
+    section#cow-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2.75rem;
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-bottom: 6rem;
+      position: relative;
+      z-index: 10;
+      user-select: text;
+    }
+
+    /* Cow card */
+    .cow-card {
+      background: linear-gradient(150deg, rgba(247,249,255,1) 0%, rgba(235,243,255,1) 100%);
+      padding: 2.75rem 3rem;
+      border-radius: var(--radius);
+      box-shadow:
+        0 8px 20px rgba(37, 99, 235, 0.18);
+      transition:
+        box-shadow var(--transition-default),
+        transform var(--transition-default);
+      display: flex;
+      flex-direction: column;
+      outline-offset: 4px;
+      user-select: text;
+    }
+
+    .cow-card:hover,
+    .cow-card:focus-within {
+      box-shadow:
+        0 14px 32px rgba(37, 99, 235, 0.33);
+      transform: translateY(-8px);
+      outline: none;
+    }
+
+    .cow-card h2 {
+      margin: 0 0 0.75rem 0;
+      font-weight: 800;
+      color: var(--color-accent);
+      font-size: 1.9rem;
+      user-select: text;
+      line-height: 1.1;
+      letter-spacing: 0.02em;
+      font-variant-caps: all-small-caps;
+    }
+
+    .cow-card p {
+      margin: 0.35rem 0;
+      color: var(--color-text-primary);
+      font-weight: 600;
+      font-size: 1.125rem;
+      user-select: text;
+      letter-spacing: 0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .cow-card .label {
+      font-weight: 700;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 0.875rem;
+      margin-right: 6px;
+      user-select: none;
+    }
+
+    .cow-card button.delete-btn {
+      margin-top: 1.5rem;
+      align-self: flex-start;
+      padding: 0.5rem 1.1rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      border: 2px solid var(--color-accent);
+      border-radius: var(--radius);
+      background: transparent;
+      cursor: pointer;
+      transition:
+        background-color var(--transition-default),
+        color var(--transition-default),
+        transform 0.3s cubic-bezier(0.4,0,0.2,1),
+        box-shadow var(--transition-default);
+      user-select: none;
+      font-feature-settings: "pnum";
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .cow-card button.delete-btn:hover,
+    .cow-card button.delete-btn:focus {
+      background-color: var(--color-accent);
+      color: white;
+      outline: none;
+      transform: scale(1.07);
+      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    /* Empty state text */
+    #cow-list > p {
+      text-align: center;
+      font-style: italic;
+      color: var(--color-text-secondary);
+      font-size: 1.25rem;
+      user-select: none;
+      padding: 3rem 1rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+      font-feature-settings: "pnum";
+    }
+
+    /* Additional new summary section */
+    .summary {
+      max-width: var(--max-container-width);
+      background: var(--color-card-bg);
+      border-radius: var(--radius);
+      box-shadow:
+        0 10px 30px rgba(37, 99, 235, 0.15);
+      padding: 2.5rem 3.5rem;
+      display: flex;
+      justify-content: space-around;
+      gap: 3.5rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      font-size: 1.375rem;
+      user-select: none;
+      flex-wrap: wrap;
+      font-feature-settings: "pnum";
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .summary-item {
+      flex: 1 1 200px;
+      border-left: 5px solid transparent;
+      transition: border-color var(--transition-default);
+      text-align: center;
+      padding-left: 1rem;
+      user-select: none;
+    }
+    .summary-item:hover {
+      border-left-color: var(--color-accent-hover);
+    }
+    .summary-item span.value {
+      display: block;
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-top: 0.25rem;
+      color: var(--color-text-primary);
+      letter-spacing: 0.04em;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      main {
+        padding: 3rem 1.5rem 6rem;
+      }
+
+      form {
+        padding: 2rem 1.5rem;
+        gap: 1.5rem;
+        font-size: 1.1rem;
+      }
+
+      .cow-card {
+        padding: 2rem 2rem;
+      }
+
+      .hero h1 {
+        font-size: 2.8rem;
+        max-width: 100%;
+      }
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 100%;
+      }
+
+      nav {
+        display: none;
+      }
+
+      .summary {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 2rem 1.5rem;
+      }
+      .summary-item {
+        border-left: none;
+        border-top: 5px solid transparent;
+        padding-left: 0;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+      }
+      .summary-item:hover {
+        border-left: none;
+        border-top-color: var(--color-accent-hover);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header role="banner" aria-label="Primary navigation">
+    <div class="logo" aria-label="Cow Milk Tracker Logo">CowMilkTracker</div>
+    <nav role="navigation" aria-label="Primary site navigation">
+      <a href="#" tabindex="0">Home</a>
+      <a href="#" tabindex="0">Records</a>
+      <a href="#" tabindex="0">About</a>
+    </nav>
+  </header>
+
+  <main role="main">
+    <section class="hero" aria-label="Hero section">
+      <h1>Track Milk Production & Puberty in Your Cows</h1>
+      <p>Maintain accurate daily records of milk yield, puberty dates, and monitor the growth progress of each cow with ease.</p>
+      <button class="cta-button" type="button" onclick="document.getElementById('cow-name').focus()">Add Your First Cow</button>
+    </section>
+
+    <form id="cow-form" aria-label="Add new cow record" autocomplete="off">
+      <div>
+        <label for="cow-name">Cow Name</label>
+        <input
+          type="text"
+          id="cow-name"
+          name="cowName"
+          required
+          placeholder="Enter cow name"
+          aria-required="true"
+          autocomplete="off"
+        />
+      </div>
+      <div>
+        <label for="milk-liters">Milk per Day (liters)</label>
+        <input
+          type="number"
+          id="milk-liters"
+          name="milkLiters"
+          min="0"
+          step="0.1"
+          required
+          placeholder="e.g. 8.5"
+          aria-required="true"
+        />
+      </div>
+      <div>
+        <label for="puberty-date">Puberty Date</label>
+        <input type="date" id="puberty-date" name="pubertyDate" required aria-required="true" />
+      </div>
+      <button type="submit" aria-label="Add cow record">Add Cow</button>
+    </form>
+
+    <section class="summary" aria-label="Summary of cow data" id="summary-section" hidden>
+      <div class="summary-item" tabindex="0" aria-live="polite" aria-atomic="true">
+        Total Cows
+        <span class="value" id="total-cows">0</span>
+      </div>
+      <div class="summary-item" tabindex="0" aria-live="polite" aria-atomic="true">
+        Average Milk (Liters/Day)
+        <span class="value" id="avg-milk">0</span>
+      </div>
+      <div class="summary-item" tabindex="0" aria-live="polite" aria-atomic="true">
+        Average Days Since Puberty
+        <span class="value" id="avg-days-puberty">0</span>
+      </div>
+    </section>
+
+    <section id="cow-list" aria-live="polite" aria-label="List of cow milk records">
+      <!-- Cow cards will be dynamically added here -->
+    </section>
+  </main>
+
+  <script>
+    // Utility function to calculate difference between two dates (years, months, days)
+    function calculatePubertyDuration(pubertyDate) {
+      const today = new Date();
+      const pubDate = new Date(pubertyDate);
+      if (pubDate > today) return null;
+
+      let years = today.getFullYear() - pubDate.getFullYear();
+      let months = today.getMonth() - pubDate.getMonth();
+      let days = today.getDate() - pubDate.getDate();
+
+      if (days < 0) {
+        months--;
+        days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+      }
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      return { years, months, days };
+    }
+
+    // Calculate total days difference between puberty date and today
+    function calculateTotalDays(pubertyDate) {
+      const today = new Date();
+      const pubDate = new Date(pubertyDate);
+      if (pubDate > today) return null;
+      const diffTime = today - pubDate; // milliseconds
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      return diffDays;
+    }
+
+    // Format years, months, days nicely
+    function formatDuration(duration) {
+      if (!duration) return 'Invalid date';
+      const parts = [];
+      if (duration.years) parts.push(duration.years + (duration.years > 1 ? ' years' : ' year'));
+      if (duration.months) parts.push(duration.months + (duration.months > 1 ? ' months' : ' month'));
+      parts.push(duration.days + (duration.days !== 1 ? ' days' : ' day'));
+      return parts.join(', ');
+    }
+
+    // Save and load to local storage
+    const STORAGE_KEY = 'cowMilkRecords';
+
+    function saveRecords(records) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+
+    function loadRecords() {
+      const data = localStorage.getItem(STORAGE_KEY);
+      return data ? JSON.parse(data) : [];
+    }
+
+    // Render the list of cows
+    function renderCows(cows) {
+      const container = document.getElementById('cow-list');
+      container.innerHTML = '';
+      if (cows.length === 0) {
+        container.innerHTML =
+          '<p>No cow records yet. Add one above to get started!</p>';
+        document.getElementById('summary-section').hidden = true;
+        return;
+      }
+
+      document.getElementById('summary-section').hidden = false;
+
+      // Compute summary values
+      let totalMilk = 0;
+      let totalDays = 0;
+      let validDaysCount = 0;
+
+      cows.forEach((cow, index) => {
+        const duration = calculatePubertyDuration(cow.pubertyDate);
+        const durationText = formatDuration(duration);
+        const totalDaysPuberty = calculateTotalDays(cow.pubertyDate);
+
+        if (totalDaysPuberty !== null) {
+          totalDays += totalDaysPuberty;
+          validDaysCount++;
+        }
+        totalMilk += cow.milkLiters;
+
+        const card = document.createElement('article');
+        card.className = 'cow-card';
+        card.tabIndex = 0;
+        card.innerHTML = `
+          <h2>${cow.name}</h2>
+          <p><span class="label">Milk Produced:</span> ${cow.milkLiters.toFixed(1)} liters/day</p>
+          <p><span class="label">Puberty Date:</span> ${new Date(
+            cow.pubertyDate
+          ).toLocaleDateString()}</p>
+          <p><span class="label">Days Since Puberty:</span> ${durationText}</p>
+          <p><span class="label">Total Days Since Puberty:</span> ${
+            totalDaysPuberty !== null ? totalDaysPuberty : 'Invalid date'
+          }</p>
+          <button
+            aria-label="Delete record for ${cow.name}"
+            data-index="${index}"
+            class="delete-btn"
+          >
+            Delete
+          </button>
+        `;
+
+        // Delete button handler
+        card.querySelector('.delete-btn').addEventListener('click', (e) => {
+          const idx = e.target.getAttribute('data-index');
+          cows.splice(idx, 1);
+          saveRecords(cows);
+          renderCows(cows);
+        });
+
+        container.appendChild(card);
+      });
+
+      // Update summary
+      document.getElementById('total-cows').textContent = cows.length;
+      document.getElementById('avg-milk').textContent = (totalMilk / cows.length).toFixed(2);
+      const avgDays = validDaysCount > 0 ? Math.round(totalDays / validDaysCount) : 0;
+      document.getElementById('avg-days-puberty').textContent = avgDays;
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('cow-form');
+      let cows = loadRecords();
+
+      renderCows(cows);
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = form.cowName.value.trim();
+        const milkLiters = parseFloat(form.milkLiters.value);
+        const pubertyDate = form.pubertyDate.value;
+
+        if (!name || isNaN(milkLiters) || !pubertyDate) {
+          alert('Please fill out all fields correctly.');
+          return;
+        }
+
+        // Add new cow record
+        cows.push({ name, milkLiters, pubertyDate });
+        saveRecords(cows);
+        renderCows(cows);
+
+        // Reset form
+        form.reset();
+        form.cowName.focus();
+      });
+
+      // Focus on input when CTA clicked handled by inline onclick in hero button
+    });
+  </script>
+</body>
+</html>
+

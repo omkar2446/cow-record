@@ -512,8 +512,8 @@
 
   <main role="main">
     <section class="hero" aria-label="Hero section">
-      <h1>Track Milk Production & Puberty in Your Cows</h1>
-      <p>Maintain accurate daily records of milk yield, puberty dates, and monitor the growth progress of each cow with ease.</p>
+      <h1>Track Milk Production & gestation in Your Cows</h1>
+      <p>Maintain accurate daily records of milk yield, gestation dates, and monitor the growth progress of each cow with ease.</p>
       <button class="cta-button" type="button" onclick="document.getElementById('cow-name').focus()">Add Your First Cow</button>
     </section>
 
@@ -544,7 +544,7 @@
         />
       </div>
       <div>
-        <label for="puberty-date">Puberty Date</label>
+        <label for="puberty-date">gestation Date</label>
         <input type="date" id="puberty-date" name="pubertyDate" required aria-required="true" />
       </div>
       <button type="submit" aria-label="Add cow record">Add Cow</button>
@@ -560,7 +560,7 @@
         <span class="value" id="avg-milk">0</span>
       </div>
       <div class="summary-item" tabindex="0" aria-live="polite" aria-atomic="true">
-        Average Days Since Puberty
+        Average Days Since gestation
         <span class="value" id="avg-days-puberty">0</span>
       </div>
     </section>
@@ -660,11 +660,11 @@
         card.innerHTML = `
           <h2>${cow.name}</h2>
           <p><span class="label">Milk Produced:</span> ${cow.milkLiters.toFixed(1)} liters/day</p>
-          <p><span class="label">Puberty Date:</span> ${new Date(
+          <p><span class="label">gestation Date:</span> ${new Date(
             cow.pubertyDate
           ).toLocaleDateString()}</p>
-          <p><span class="label">Days Since Puberty:</span> ${durationText}</p>
-          <p><span class="label">Total Days Since Puberty:</span> ${
+          <p><span class="label">Days Since gestation:</span> ${durationText}</p>
+          <p><span class="label">Total Days Since gestation:</span> ${
             totalDaysPuberty !== null ? totalDaysPuberty : 'Invalid date'
           }</p>
           <button
@@ -727,4 +727,3 @@
   </script>
 </body>
 </html>
-
